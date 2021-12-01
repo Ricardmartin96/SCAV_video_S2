@@ -1,4 +1,5 @@
 import subprocess
+import requests
 
 def video_motionvector_macroblocks (input, output):
     subprocess.call(["ffmpeg", "-flags2", "+export_mvs", "-i", input,
@@ -56,10 +57,13 @@ def video_container_reader(input):
     file.close()
 
 def video_subtitles(input, output):
-    # FALTA LA PART DE DOWNLOAD SUBTITLES
 
+    link = "https://dl.opensubtitles.org/es/download/file/1957437052"
+    sub = requests.get(link)
+    with open("subtitles.srt", "w") as file:
+        file.write(sub.text)
     subprocess.call(["ffmpeg", "-i", input, "-vf",
-                     "subtitles=subtitles.str", output])
+                     "subtitles=subtitles.srt", output])
 
 if __name__ == "__main__":
 
